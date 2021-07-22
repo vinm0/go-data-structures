@@ -1,14 +1,15 @@
+// The set data structure is an unordered collection of elements
+// with constant time insertion, lookup, and deletion operations.
+// This GO set uses an underlying map with empty values (i.e, struct{ } ).
+// The keys of the map serve as the values of the set.
+// Currently, does not support non-hashable types
 package datas
 
 import (
-	"reflect"
+	valid "github.com/vinm0/dataStructures/helper"
 )
 
-// The set data structure implements an unordered collection of elements
-// with constant time insertion, lookup, and deletion.
-
-// The GO set uses an underlying map with empty values (i.e, struct{ } ).
-// The keys of the map serve as the values of the set.
+// Uses map to implement set
 type set struct {
 	data map[interface{}]struct{}
 }
@@ -26,37 +27,30 @@ func (s *set) Size() int {
 	return len(s.data)
 }
 
-// Adds one or more items to the set
-// Note: Slices should be unpacked.
-func (s *set) Add(items ...interface{}) {
-	for _, item := range items {
-		k := reflect.TypeOf(item).Kind()
-		hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
-		if !hashable {
-			continue
-		}
+// Adds one item to the set.
+// Returns true if item is succesfully added to the set. Otherwise, returns false
+func (s *set) Add(item interface{}) bool {
 
-		s.data[item] = struct{}{}
+	if item == nil || !valid.Hashable(item) {
+		return false
 	}
+
+	// map argument key to empty value
+	s.data[item] = struct{}{}
+	return true
 }
 
-// Removes one or more items from the set.
-// If item does not exist, no-op.
-// Note: Slices should be unpacked.
-func (s *set) Remove(items ...interface{}) {
-	for _, item := range items {
-		delete(s.data, item)
-	}
+// Removes one item from the set.
+// If the item does not exist, no-op.
+func (s *set) Remove(item interface{}) {
+	delete(s.data, item)
 }
 
 // Returns true if item exists in the set.
 // Otherwise, returns false
 func (s *set) Contains(item interface{}) bool {
 
-	// Validate arguments: must be hashable
-	k := reflect.TypeOf(item).Kind()
-	hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
-	if !hashable {
+	if !valid.Hashable(item) {
 		return false
 	}
 
@@ -64,54 +58,10 @@ func (s *set) Contains(item interface{}) bool {
 	return ok
 }
 
-// Returns true if all items exist in the set.
-// Otherwise, returns false.
-// Note: Slices should be unpacked.
-func (s *set) ContainsAll(items ...interface{}) bool {
-	for _, item := range items {
-
-		// Validate arguments: must be hashable
-		k := reflect.TypeOf(item).Kind()
-		hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
-		if !hashable {
-			return false
-		}
-
-		_, ok := s.data[item]
-		if !ok {
-			return false // Some item not in set
-		}
-	}
-
-	return true // All items in set
-}
-
-// Returns true if any item provided exists in the set.
-// Returns false if no item exists.
-// Note: Slices should be unpacked.
-func (s *set) ContainsAny(items ...interface{}) bool {
-	for _, item := range items {
-
-		// Validate arguments: must be hashable
-		k := reflect.TypeOf(item).Kind()
-		hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
-		if !hashable {
-			continue
-		}
-
-		_, ok := s.data[item]
-		if ok {
-			return true // Some item in set
-		}
-	}
-
-	return false // No items in set
-}
-
 // Empties the set
 func (s *set) Clear() {
 	// Value of new set at original address
-	*s = set{}
+	s.data = make(map[interface{}]struct{})
 }
 
 // Returns true if the set is empty. Otherwise, returns false
@@ -120,9 +70,9 @@ func (s *set) IsEmpty() bool {
 }
 
 // Returns a slice containing each value in the set.
-// Tip: Minimize calls to ToSlice()
 func (s *set) ToSlice() []interface{} {
 	setSlice := make([]interface{}, 0, len(s.data))
+
 	for key := range s.data {
 		setSlice = append(setSlice, key)
 	}
