@@ -11,7 +11,7 @@ func TestNewSet(t *testing.T) {
 	}
 }
 
-func TestSize(t *testing.T) {
+func TestAdd(t *testing.T) {
 	s := NewSet()
 	if len(s.data) != 0 {
 		t.Errorf("Wrong size set: %d. Expected %d", len(s.data), 0)
