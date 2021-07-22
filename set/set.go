@@ -1,8 +1,9 @@
-package set
-
 // The set data structure implements an unordered collection of elements
 // with constant time insertion, lookup, and deletion.
+package set
+
 // The GO set uses an underlying map with empty values (i.e, struct{ } ).
+// The keys of the map serve as the values of the set.
 type set struct {
 	data map[interface{}]struct{}
 }
