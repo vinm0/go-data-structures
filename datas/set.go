@@ -1,6 +1,11 @@
+package datas
+
+import (
+	"reflect"
+)
+
 // The set data structure implements an unordered collection of elements
 // with constant time insertion, lookup, and deletion.
-package set
 
 // The GO set uses an underlying map with empty values (i.e, struct{ } ).
 // The keys of the map serve as the values of the set.
@@ -24,6 +29,12 @@ func (s *set) Size() int {
 // Note: Slices should be unpacked.
 func (s *set) Add(items ...interface{}) {
 	for _, item := range items {
+		k := reflect.TypeOf(item).Kind()
+		hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
+		if !hashable {
+			continue
+		}
+
 		s.data[item] = struct{}{}
 	}
 }
