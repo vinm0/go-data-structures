@@ -1,9 +1,21 @@
 package set
 
-// Add, Remove, Contains, Size,
+// The set data structure implements an unordered collection of elements
+// with constant time insertion, lookup, and deletion.
+// The GO set uses an underlying map with empty values (i.e, struct{ } ).
 type set struct {
 	data map[interface{}]struct{}
-	size int
+}
+
+// Creates a base empty set
+func NewSet() *set {
+	s := &set{}
+	s.data = make(map[interface{}]struct{})
+	return s
+}
+
+func (s *set) Size() int {
+	return len(s.data)
 }
 
 func (s *set) Add(items ...interface{}) {
@@ -12,12 +24,54 @@ func (s *set) Add(items ...interface{}) {
 	}
 }
 
-func (s *set) Remove(item interface{}) bool {
+func (s *set) Remove(items ...interface{}) {
+	for _, item := range items {
+		delete(s.data, item)
+	}
+}
+
+func (s *set) Contains(item interface{}) bool {
 	_, ok := s.data[item]
-	if !ok {
-		return false
+	return ok
+}
+
+func (s *set) ContainsAll(items ...interface{}) bool {
+	for _, item := range items {
+
+		_, ok := s.data[item]
+		if !ok {
+			return false
+		}
 	}
 
-	delete(s.data, item)
 	return true
+}
+
+func (s *set) ContainsAny(items ...interface{}) bool {
+	for _, item := range items {
+
+		_, ok := s.data[item]
+		if ok {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (s *set) Clear() {
+	*s = set{}
+}
+
+func (s *set) IsEmpty() bool {
+	return len(s.data) == 0
+}
+
+func (s *set) ToSlice() []interface{} {
+	setSlice := make([]interface{}, 0, len(s.data))
+	for key := range s.data {
+		setSlice = append(setSlice, key)
+	}
+
+	return setSlice
 }
