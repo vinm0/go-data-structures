@@ -22,6 +22,7 @@ func NewSet() *set {
 
 // Returns the size of the set
 func (s *set) Size() int {
+	// Use the length field of the underlying map structure
 	return len(s.data)
 }
 
@@ -39,7 +40,8 @@ func (s *set) Add(items ...interface{}) {
 	}
 }
 
-// Removes one or more items from the set
+// Removes one or more items from the set.
+// If item does not exist, no-op.
 // Note: Slices should be unpacked.
 func (s *set) Remove(items ...interface{}) {
 	for _, item := range items {
@@ -50,6 +52,14 @@ func (s *set) Remove(items ...interface{}) {
 // Returns true if item exists in the set.
 // Otherwise, returns false
 func (s *set) Contains(item interface{}) bool {
+
+	// Validate arguments: must be hashable
+	k := reflect.TypeOf(item).Kind()
+	hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
+	if !hashable {
+		return false
+	}
+
 	_, ok := s.data[item]
 	return ok
 }
@@ -60,13 +70,20 @@ func (s *set) Contains(item interface{}) bool {
 func (s *set) ContainsAll(items ...interface{}) bool {
 	for _, item := range items {
 
+		// Validate arguments: must be hashable
+		k := reflect.TypeOf(item).Kind()
+		hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
+		if !hashable {
+			return false
+		}
+
 		_, ok := s.data[item]
 		if !ok {
-			return false
+			return false // Some item not in set
 		}
 	}
 
-	return true
+	return true // All items in set
 }
 
 // Returns true if any item provided exists in the set.
@@ -75,17 +92,25 @@ func (s *set) ContainsAll(items ...interface{}) bool {
 func (s *set) ContainsAny(items ...interface{}) bool {
 	for _, item := range items {
 
+		// Validate arguments: must be hashable
+		k := reflect.TypeOf(item).Kind()
+		hashable := !(k < reflect.Array || k == reflect.Ptr || k == reflect.UnsafePointer)
+		if !hashable {
+			continue
+		}
+
 		_, ok := s.data[item]
 		if ok {
-			return true
+			return true // Some item in set
 		}
 	}
 
-	return false
+	return false // No items in set
 }
 
 // Empties the set
 func (s *set) Clear() {
+	// Value of new set at original address
 	*s = set{}
 }
 
