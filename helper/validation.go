@@ -9,3 +9,7 @@ func Hashable(item interface{}) bool {
 		k == reflect.Func ||
 		k == reflect.Map)
 }
+
+func ValidIndex(index int, size int) bool {
+	return index >= 0 && index < size
+}
