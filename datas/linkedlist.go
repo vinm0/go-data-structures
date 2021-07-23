@@ -13,26 +13,28 @@ type node struct {
 	next  *node
 }
 
+// Creates a base empty linked list.
 func NewLinkedlist() *linkedlist {
 	return &linkedlist{}
 }
 
+// Returns the number of elements in the linked list
 func (ll *linkedlist) Size() int {
 	return ll.size
 }
 
+// Adds one value to the end of the linked list.
+// Returns true if the value is successfully added to the linked list.
+// Otherwise, returns false.
 func (ll *linkedlist) Append(val interface{}) (ok bool) {
-	if val == nil {
-		return false
-	}
 
 	n := &node{value: val}
 
-	// if linkedlist is empty
 	if ll.IsEmpty() {
 		return ll.addToEmpty(n)
 	}
 
+	// Update tail
 	ll.tail.next = n
 	ll.tail = n
 	ll.size++
@@ -40,6 +42,9 @@ func (ll *linkedlist) Append(val interface{}) (ok bool) {
 	return true
 }
 
+// Adds one value to the beginning of the linked list.
+// Returns true if the value is successfully added to the linked list.
+// Otherwise, returns false.
 func (ll *linkedlist) Preppend(val interface{}) (ok bool) {
 	n := &node{value: val}
 
@@ -47,6 +52,7 @@ func (ll *linkedlist) Preppend(val interface{}) (ok bool) {
 		return ll.addToEmpty(n)
 	}
 
+	// Update head
 	n.next = ll.head.next
 	ll.head = n
 	ll.size++
@@ -54,6 +60,10 @@ func (ll *linkedlist) Preppend(val interface{}) (ok bool) {
 	return true
 }
 
+// Adds a new value at the target index.
+// The previous value at the target index will follow the new index.
+// Returns true if the value is successfully added to the linked list.
+// Otherwise, returns false.
 func (ll *linkedlist) Insert(val interface{}, index int) (ok bool) {
 	if index == 0 {
 		return ll.Preppend(val)
@@ -69,6 +79,7 @@ func (ll *linkedlist) Insert(val interface{}, index int) (ok bool) {
 
 	n := &node{value: val}
 
+	// Traverse to the index prior to the target index
 	curr, _ := ll.traverseListTo(index - 1)
 
 	n.next = curr.next
@@ -77,38 +88,44 @@ func (ll *linkedlist) Insert(val interface{}, index int) (ok bool) {
 	return true
 }
 
-func (ll *linkedlist) Index(index int) (val interface{}, ok bool) {
+// Returns the value of the item at the target index.
+// Returns nil if index is invalid or linked list is empty.
+func (ll *linkedlist) Index(index int) (val interface{}) {
 	if ll.IsEmpty() || !valid.ValidIndex(index, ll.size) {
-		return nil, false
+		return nil
 	}
 
 	if index == ll.size-1 {
-		return ll.tail.value, true
+		return ll.tail.value
 	}
 
 	curr, _ := ll.traverseListTo(index)
 
-	return curr.value, true
+	return curr.value
 }
 
-func (ll *linkedlist) Find(val interface{}) (index int, ok bool) {
-	if ll.IsEmpty() || !valid.ValidIndex(index, ll.size) {
-		return -1, false
+// Returns the index if the first instance if the target value.
+// Returns -1 if the target value does not exist.
+func (ll *linkedlist) Find(val interface{}) (index int) {
+	if ll.IsEmpty() {
+		return -1
 	}
 
 	curr := ll.head
 
 	for i := 0; i < ll.size; i++ {
 		if curr.value == val {
-			return i, true
+			return i
 		}
 
 		curr = curr.next
 	}
 
-	return -1, false
+	return -1
 }
 
+// Updates the value of the element at the target index.
+// Returns true if update is successful. Otherwise, return false.
 func (ll *linkedlist) UpdateAt(index int, val interface{}) (ok bool) {
 	if ll.IsEmpty() || !valid.ValidIndex(index, ll.size) {
 		return false
@@ -125,15 +142,18 @@ func (ll *linkedlist) UpdateAt(index int, val interface{}) (ok bool) {
 	return true
 }
 
-func (ll *linkedlist) RemoveAt(index int) (val interface{}, ok bool) {
-	if !valid.ValidIndex(index, ll.size) || ll.size == 0 {
-		return nil, false
+// Removes the item at the target index.
+// Returns the value of the removed item.
+// Returns nil if no item is removed.
+func (ll *linkedlist) RemoveAt(index int) (val interface{}) {
+	if ll.IsEmpty() || !valid.ValidIndex(index, ll.size) {
+		return nil
 	}
 
 	if ll.size == 1 {
 		val = ll.head.value
 		ll.Clear()
-		return val, true
+		return val
 	}
 
 	curr, prev := ll.traverseListTo(index)
@@ -146,22 +166,30 @@ func (ll *linkedlist) RemoveAt(index int) (val interface{}, ok bool) {
 
 	ll.size--
 
-	return val, true
+	return val
 }
 
-func (ll *linkedlist) RemoveVal(val interface{}) (index int, ok bool) {
+// Removes the first occurrence of the target value.
+// Returns the index of the item removed.
+// Returns -1 if no item is removed.
+func (ll *linkedlist) RemoveVal(val interface{}) (index int) {
+	// Handle instances where the linked list has 0 or 1 items
+	// to avoid runtime errors with prev and curr pointers.
+
+	// No items to remove in an empty linked list
 	if ll.IsEmpty() {
-		return -1, false
+		return -1
 	}
 
+	// Target is the first item.
 	if ll.head.value == val {
 		ll.head = ll.head.next
 		ll.size--
-		return 0, true
+		return 0
 	}
 
 	if ll.size == 1 {
-		return -1, false
+		return -1
 	}
 
 	prev := ll.head
@@ -172,24 +200,32 @@ func (ll *linkedlist) RemoveVal(val interface{}) (index int, ok bool) {
 			prev.next = curr.next
 			curr = nil
 			ll.size--
-			return i, true
+
+			return i // Value found
 		}
 
 		prev = curr
 		curr = curr.next
 	}
 
-	return -1, false
+	return -1 // Value not found
 }
 
+// Empties the linked list
 func (ll *linkedlist) Clear() {
 	ll = new(linkedlist)
 }
 
+// Returns true if the linked list contains no items.
+// Otherwise, returns false.
 func (ll *linkedlist) IsEmpty() bool {
 	return ll.head == nil
 }
 
+// Helper Function: Inserts node into an empty linked list.
+// Updates head, tail, and size.
+// Returns true if n is a valid node and is succesfully added to the linked list.
+// Otherwise, returns false
 func (ll *linkedlist) addToEmpty(n *node) (ok bool) {
 	if n == nil {
 		return false
@@ -198,9 +234,12 @@ func (ll *linkedlist) addToEmpty(n *node) (ok bool) {
 	ll.head = n
 	ll.tail = n
 	ll.size++
+
 	return true
 }
 
+// Helper Function: Traverses the linked list up to the target index.
+// Returns curr as the node at the target index, and prev as the node prior.
 func (ll *linkedlist) traverseListTo(index int) (curr *node, prev *node) {
 
 	curr = ll.head
