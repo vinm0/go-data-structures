@@ -3,11 +3,7 @@
 // This GO set uses an underlying map with empty values (i.e, struct{ } ).
 // The keys of the map serve as the values of the set.
 // Currently, does not support non-hashable types
-package datas
-
-import (
-	valid "github.com/vinm0/dataStructures/helper"
-)
+package main
 
 // Uses map to implement set
 type set struct {
@@ -31,7 +27,7 @@ func (s *set) Size() int {
 // Returns true if item is succesfully added to the set. Otherwise, returns false
 func (s *set) Add(item interface{}) bool {
 
-	if item == nil || !valid.Hashable(item) {
+	if item == nil || !Hashable(item) {
 		return false
 	}
 
@@ -50,7 +46,7 @@ func (s *set) Remove(item interface{}) {
 // Otherwise, returns false
 func (s *set) Contains(item interface{}) bool {
 
-	if !valid.Hashable(item) {
+	if !Hashable(item) {
 		return false
 	}
 

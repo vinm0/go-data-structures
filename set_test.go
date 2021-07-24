@@ -1,4 +1,4 @@
-package datas
+package main
 
 import (
 	"testing"

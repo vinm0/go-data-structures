@@ -1,6 +1,4 @@
-package datas
-
-import valid "github.com/vinm0/dataStructures/helper"
+package main
 
 type linkedlist struct {
 	head *node
@@ -73,7 +71,7 @@ func (ll *linkedlist) Insert(val interface{}, index int) (ok bool) {
 		return ll.Append(val)
 	}
 
-	if !valid.ValidIndex(index, ll.size) {
+	if !ValidIndex(index, ll.size) {
 		return false
 	}
 
@@ -91,7 +89,7 @@ func (ll *linkedlist) Insert(val interface{}, index int) (ok bool) {
 // Returns the value of the item at the target index.
 // Returns nil if index is invalid or linked list is empty.
 func (ll *linkedlist) Index(index int) (val interface{}) {
-	if ll.IsEmpty() || !valid.ValidIndex(index, ll.size) {
+	if ll.IsEmpty() || !ValidIndex(index, ll.size) {
 		return nil
 	}
 
@@ -127,7 +125,7 @@ func (ll *linkedlist) Find(val interface{}) (index int) {
 // Updates the value of the element at the target index.
 // Returns true if update is successful. Otherwise, return false.
 func (ll *linkedlist) UpdateAt(index int, val interface{}) (ok bool) {
-	if ll.IsEmpty() || !valid.ValidIndex(index, ll.size) {
+	if ll.IsEmpty() || !ValidIndex(index, ll.size) {
 		return false
 	}
 
@@ -146,7 +144,7 @@ func (ll *linkedlist) UpdateAt(index int, val interface{}) (ok bool) {
 // Returns the value of the removed item.
 // Returns nil if no item is removed.
 func (ll *linkedlist) RemoveAt(index int) (val interface{}) {
-	if ll.IsEmpty() || !valid.ValidIndex(index, ll.size) {
+	if ll.IsEmpty() || !ValidIndex(index, ll.size) {
 		return nil
 	}
 

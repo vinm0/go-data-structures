@@ -2,11 +2,7 @@
 // with constant time lookup, update, and append operations.
 // This GO list uses an underlying slice with methods for manipualation.
 
-package datas
-
-import (
-	valid "github.com/vinm0/dataStructures/helper"
-)
+package main
 
 type list struct {
 	sli []interface{}
@@ -43,7 +39,7 @@ func (l *list) Pop() (val interface{}) {
 // Returns the value of the item at the target index.
 // Returns nil if target index is out of range.
 func (l *list) Index(index int) (val interface{}) {
-	if l.IsEmpty() || !valid.ValidIndex(index, len(l.sli)) {
+	if l.IsEmpty() || !ValidIndex(index, len(l.sli)) {
 		return nil
 	}
 
@@ -53,7 +49,7 @@ func (l *list) Index(index int) (val interface{}) {
 // Returns the index of the first occurrence of the target value.
 // Returns -1 if the value does not exist.
 func (l *list) Find(val interface{}) (index int) {
-	if l.IsEmpty() || !valid.ValidIndex(index, len(l.sli)) {
+	if l.IsEmpty() || !ValidIndex(index, len(l.sli)) {
 		return -1
 	}
 
@@ -70,7 +66,7 @@ func (l *list) Find(val interface{}) (index int) {
 // Returns true if the list was successfully updated.
 // Otherwise, returns false.
 func (l *list) UpdateAt(index int, val interface{}) (ok bool) {
-	if l.IsEmpty() || !valid.ValidIndex(index, len(l.sli)) {
+	if l.IsEmpty() || !ValidIndex(index, len(l.sli)) {
 		return false
 	}
 
@@ -93,7 +89,7 @@ func (l *list) InsertAt(index int, val interface{}) (ok bool) {
 		return l.Front(val)
 	}
 
-	if !valid.ValidIndex(index, len(l.sli)) {
+	if !ValidIndex(index, len(l.sli)) {
 		return false
 	}
 
