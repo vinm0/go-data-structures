@@ -86,7 +86,7 @@ func (l *list) InsertAt(index int, val interface{}) (ok bool) {
 	}
 
 	if index == 0 {
-		return l.Front(val)
+		return l.PushFront(val)
 	}
 
 	if !ValidIndex(index, len(l.sli)) {
@@ -105,7 +105,7 @@ func (l *list) InsertAt(index int, val interface{}) (ok bool) {
 // All items are shifted 1 index higher.
 // Returns true if the list was successfully updated.
 // Otherwise, returns false.
-func (l *list) Front(val interface{}) (ok bool) {
+func (l *list) PushFront(val interface{}) (ok bool) {
 	var first []interface{}
 	first = append(first, val)
 
@@ -126,6 +126,18 @@ func (l *list) PopFront() (val interface{}) {
 	l.sli = l.sli[1:]
 
 	return val
+}
+
+func (l *list) Push(val interface{}) {
+	l.Append(val)
+}
+
+func (l *list) Enqueue(val interface{}) {
+	l.Append(val)
+}
+
+func (l *list) Dequeue() (val interface{}) {
+	return l.PopFront()
 }
 
 // Empties the list

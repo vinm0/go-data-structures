@@ -7,7 +7,7 @@ type Stack interface {
 }
 
 type Queue interface {
-	Enqueue(interface{}) bool
+	Enqueue(interface{})
 	Dequeue() interface{}
 	Peek() interface{}
 }
