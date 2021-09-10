@@ -27,7 +27,7 @@ func (s *set) Size() int {
 // Returns true if item is succesfully added to the set. Otherwise, returns false
 func (s *set) Add(item interface{}) bool {
 
-	if item == nil || !Hashable(item) {
+	if !Hashable(item) {
 		return false
 	}
 
@@ -39,6 +39,10 @@ func (s *set) Add(item interface{}) bool {
 // Removes one item from the set.
 // If the item does not exist, no-op.
 func (s *set) Remove(item interface{}) {
+	if item == nil {
+		return
+	}
+
 	delete(s.data, item)
 }
 

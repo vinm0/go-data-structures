@@ -3,6 +3,10 @@ package main
 import "reflect"
 
 func Hashable(item interface{}) bool {
+	if item == nil {
+		return false
+	}
+
 	k := reflect.TypeOf(item).Kind()
 
 	return !(k == reflect.Slice ||
