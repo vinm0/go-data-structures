@@ -144,6 +144,32 @@ func TestContains(t *testing.T) {
 	}
 }
 
+func TestToSlice(t *testing.T) {
+	tests := []struct {
+		s    set
+		want []interface{}
+	}{
+		{*sampleSet(), []interface{}{1, "two", 3}},
+		{*NewSet(), []interface{}{}},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprint(tt.want)
+		t.Run(testname, func(t *testing.T) {
+			sli := tt.s.ToSlice()
+			if len(sli) != len(tt.want) {
+				t.Errorf("got len %d, wanted len %d", len(sli), len(tt.want))
+			}
+
+			for i, v := range sli {
+				if v != tt.want[i] {
+					t.Errorf("got %v, wanted %v", v, tt.want[i])
+				}
+			}
+		})
+	}
+}
+
 func sampleSet() *set {
 	s := NewSet()
 	s.Add(1)
