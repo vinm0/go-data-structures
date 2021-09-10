@@ -107,6 +107,43 @@ func TestRemove(t *testing.T) {
 	}
 }
 
+func TestContains(t *testing.T) {
+	samp := *sampleSet()
+	tests := []struct {
+		s    set
+		add  interface{}
+		find interface{}
+		want bool
+	}{
+		{samp, nil, nil, false},
+		{samp, nil, "", false},
+		{samp, "", "", true},
+		{samp, nil, 0, false},
+		{samp, 0, 0, true},
+		{samp, 1, 1, true},
+		{samp, 1, "two", true},
+		{samp, 1, 3, true},
+		{*NewSet(), nil, nil, false},
+		{*NewSet(), nil, "", false},
+		{*NewSet(), "", "", true},
+		{*NewSet(), nil, 0, false},
+		{*NewSet(), 0, 0, true},
+		{*NewSet(), 1, 1, true},
+		{*NewSet(), 1, "two", false},
+		{*NewSet(), 1, 3, false},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprint(tt.s, ": add", tt.add)
+		t.Run(testname, func(t *testing.T) {
+			tt.s.Add(tt.add)
+			if tt.s.Contains(tt.find) != tt.want {
+				t.Errorf("got %t, wanted %t", !tt.want, tt.want)
+			}
+		})
+	}
+}
+
 func sampleSet() *set {
 	s := NewSet()
 	s.Add(1)
