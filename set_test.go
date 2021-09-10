@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -71,4 +72,46 @@ func TestAdd(t *testing.T) {
 	if len(s.data) != 1 {
 		t.Errorf("Wrong size set: %d. Expected %d", len(s.data), 1)
 	}
+}
+
+func TestRemove(t *testing.T) {
+	tests := []struct {
+		s       set
+		rm      interface{}
+		wantLen int
+	}{
+		{*sampleSet(), nil, 3},
+		{*sampleSet(), "", 3},
+		{*sampleSet(), 0, 3},
+		{*sampleSet(), 3, 2},
+		{*sampleSet(), "two", 2},
+		{*sampleSet(), 1, 2},
+		{*NewSet(), nil, 0},
+		{*NewSet(), "", 0},
+		{*NewSet(), 0, 0},
+		{*NewSet(), 3, 0},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintln(tt.s, ":", tt.wantLen)
+		t.Run(testname, func(t *testing.T) {
+			tt.s.Remove(tt.rm)
+			len := len(tt.s.data)
+			if len != tt.wantLen {
+				t.Errorf("got len %d, want len %d", len, tt.wantLen)
+			}
+			if tt.s.Contains(tt.rm) {
+				t.Errorf("%v not removed", tt.rm)
+			}
+		})
+	}
+}
+
+func sampleSet() *set {
+	s := NewSet()
+	s.Add(1)
+	s.Add("two")
+	s.Add(3)
+
+	return s
 }
