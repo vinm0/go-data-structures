@@ -58,6 +58,34 @@ func TestIndex(t *testing.T) {
 	}
 }
 
+func TestFind(t *testing.T) {
+	tests := []struct {
+		l    list
+		find interface{}
+		want int
+	}{
+		{list{}, nil, -1},
+		{list{}, 0, -1},
+		{list{nil}, nil, 0},
+		{list{0, nil}, nil, 1},
+		{list{0, nil}, 0, 0},
+		{list{0, nil}, 1, -1},
+		{list{0, "one"}, "one", 1},
+		{list{0, "one"}, "two", -1},
+		{list{"one", "one"}, "one", 0},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%v : %d", tt.l, tt.find)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.l.Find(tt.find)
+			if ans != tt.want {
+				t.Errorf("got %d, want %d", ans, tt.want)
+			}
+		})
+	}
+}
+
 func sampleList(args ...interface{}) list {
 	l := NewList()
 	for _, v := range args {
