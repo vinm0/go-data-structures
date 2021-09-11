@@ -33,6 +33,31 @@ func TestPop(t *testing.T) {
 	}
 }
 
+func TestIndex(t *testing.T) {
+	testCases := []struct {
+		l     list
+		index int
+		want  interface{}
+	}{
+		{list{}, 0, nil},
+		{list{nil}, 0, nil},
+		{list{1}, 0, 1},
+		{list{1}, -1, nil},
+		{list{1}, 1, nil},
+		{list{1, "two"}, 1, "two"},
+		{list{1, "two"}, 3, nil},
+	}
+	for _, tC := range testCases {
+		testname := fmt.Sprintf("%v : %d", tC.l, tC.index)
+		t.Run(testname, func(t *testing.T) {
+			ans := tC.l.Index(tC.index)
+			if ans != tC.want {
+				t.Errorf("got %v, want %v", ans, tC.want)
+			}
+		})
+	}
+}
+
 func sampleList(args ...interface{}) list {
 	l := NewList()
 	for _, v := range args {
