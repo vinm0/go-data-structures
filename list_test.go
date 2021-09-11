@@ -86,6 +86,42 @@ func TestFind(t *testing.T) {
 	}
 }
 
+func TestUpdateAt(t *testing.T) {
+	tests := []struct {
+		l        list
+		index    int
+		val      interface{}
+		want     bool
+		wantList list
+	}{
+		{list{}, 1, 1, false, list{}},
+		{list{}, 0, nil, false, list{}},
+		{list{}, 1, 1, false, list{}},
+		{list{nil}, 0, nil, true, list{nil}},
+		{list{nil}, 0, 1, true, list{1}},
+		{list{nil}, 1, 0, false, list{nil}},
+		{list{nil}, -1, 1, false, list{nil}},
+		{list{nil, 1}, 1, "two", true, list{nil, "two"}},
+		{list{nil, 1}, 0, "NotNil", true, list{"NotNil", 1}},
+		{list{1, "two", 3, "four"}, 2, "three", true, list{1, "two", "three", "four"}},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%v : %v", tt.l, tt.val)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.l.UpdateAt(tt.index, tt.val)
+			if ans != tt.want {
+				t.Errorf("got %t, want %t", ans, tt.want)
+			}
+			for i, v := range tt.wantList {
+				if tt.l[i] != v {
+					t.Errorf("got %v at %d, want %v", tt.l[i], i, v)
+				}
+			}
+		})
+	}
+}
+
 func sampleList(args ...interface{}) list {
 	l := NewList()
 	for _, v := range args {
