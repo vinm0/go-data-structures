@@ -60,7 +60,8 @@ func (l *list) Find(val interface{}) (index int) {
 }
 
 // Sets the item at the target index with the value val.
-// Returns true if the list was successfully updated.
+// Returns true if the list was successfully updated,
+// even if the previous value is identical to the updated value.
 // Otherwise, returns false.
 func (l *list) UpdateAt(index int, val interface{}) (ok bool) {
 	if l.IsEmpty() || !ValidIndex(index, len(*l)) {
