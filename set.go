@@ -11,7 +11,7 @@ type set struct {
 }
 
 // Creates a base empty set
-func NewSet() *set {
+func Set() *set {
 	s := &set{}
 	s.data = make(map[interface{}]struct{})
 	return s

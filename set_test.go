@@ -5,15 +5,15 @@ import (
 	"testing"
 )
 
-func TestNewSet(t *testing.T) {
-	s := NewSet()
+func TestSet(t *testing.T) {
+	s := Set()
 	if len(s.data) != 0 {
 		t.Errorf("Wrong size set: %d. Expected %d", len(s.data), 0)
 	}
 }
 
 func TestAdd(t *testing.T) {
-	s := NewSet()
+	s := Set()
 	if len(s.data) != 0 {
 		t.Errorf("Wrong size set: %d. Expected %d", len(s.data), 0)
 	}
@@ -86,10 +86,10 @@ func TestRemove(t *testing.T) {
 		{*sampleSet(), 3, 2},
 		{*sampleSet(), "two", 2},
 		{*sampleSet(), 1, 2},
-		{*NewSet(), nil, 0},
-		{*NewSet(), "", 0},
-		{*NewSet(), 0, 0},
-		{*NewSet(), 3, 0},
+		{*Set(), nil, 0},
+		{*Set(), "", 0},
+		{*Set(), 0, 0},
+		{*Set(), 3, 0},
 	}
 
 	for _, tt := range tests {
@@ -123,14 +123,14 @@ func TestContains(t *testing.T) {
 		{samp, 1, 1, true},
 		{samp, 1, "two", true},
 		{samp, 1, 3, true},
-		{*NewSet(), nil, nil, false},
-		{*NewSet(), nil, "", false},
-		{*NewSet(), "", "", true},
-		{*NewSet(), nil, 0, false},
-		{*NewSet(), 0, 0, true},
-		{*NewSet(), 1, 1, true},
-		{*NewSet(), 1, "two", false},
-		{*NewSet(), 1, 3, false},
+		{*Set(), nil, nil, false},
+		{*Set(), nil, "", false},
+		{*Set(), "", "", true},
+		{*Set(), nil, 0, false},
+		{*Set(), 0, 0, true},
+		{*Set(), 1, 1, true},
+		{*Set(), 1, "two", false},
+		{*Set(), 1, 3, false},
 	}
 
 	for _, tt := range tests {
@@ -150,7 +150,7 @@ func TestToSlice(t *testing.T) {
 		want []interface{}
 	}{
 		{*sampleSet(), []interface{}{1, "two", 3}},
-		{*NewSet(), []interface{}{}},
+		{*Set(), []interface{}{}},
 	}
 
 	for _, tt := range tests {
@@ -171,7 +171,7 @@ func TestToSlice(t *testing.T) {
 }
 
 func sampleSet() *set {
-	s := NewSet()
+	s := Set()
 	s.Add(1)
 	s.Add("two")
 	s.Add(3)
