@@ -43,7 +43,7 @@ func (ll *linkedlist) Append(val interface{}) (ok bool) {
 // Adds one value to the beginning of the linked list.
 // Returns true if the value is successfully added to the linked list.
 // Otherwise, returns false.
-func (ll *linkedlist) Preppend(val interface{}) (ok bool) {
+func (ll *linkedlist) PushFront(val interface{}) (ok bool) {
 	n := &node{value: val}
 
 	if ll.IsEmpty() {
@@ -64,7 +64,7 @@ func (ll *linkedlist) Preppend(val interface{}) (ok bool) {
 // Otherwise, returns false.
 func (ll *linkedlist) Insert(val interface{}, index int) (ok bool) {
 	if index == 0 {
-		return ll.Preppend(val)
+		return ll.PushFront(val)
 	}
 
 	if index == ll.size {
