@@ -189,6 +189,37 @@ func TestPushFront(t *testing.T) {
 	}
 }
 
+func TestPopFront(t *testing.T) {
+	tests := []struct {
+		l        list
+		wantList list
+		want     interface{}
+	}{
+		{list{}, list{}, nil},
+		{list{nil}, list{}, nil},
+		{list{0}, list{}, 0},
+		{list{""}, list{}, ""},
+		{list{"", nil}, list{nil}, ""},
+		{list{nil, nil}, list{nil}, nil},
+		{list{"test", nil}, list{nil}, "test"},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%v : %v", tt.l, tt.want)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.l.PopFront()
+			if ans != tt.want {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+			for i, v := range tt.wantList {
+				if tt.l[i] != v {
+					t.Errorf("got %v at %d, want %v", tt.l[i], i, v)
+				}
+			}
+		})
+	}
+}
+
 func sampleList(args ...interface{}) list {
 	l := NewList()
 	for _, v := range args {
