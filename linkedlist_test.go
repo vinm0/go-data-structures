@@ -252,3 +252,65 @@ func TestIndexLL(t *testing.T) {
 		})
 	}
 }
+
+func TestFindLL(t *testing.T) {
+	tests := []struct {
+		ll   linkedlist
+		find interface{}
+		want int
+	}{
+		{linkedlist{}, nil, -1},
+		{linkedlist{}, "", -1},
+		{linkedlist{}, 0, -1},
+		{
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+			nil,
+			0,
+		},
+		{
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+			0,
+			-1,
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			"one",
+			0,
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			nil,
+			-1,
+		},
+		{
+			linkedlist{head: &node{nil, &node{nil, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			"three",
+			2,
+		},
+		{
+			linkedlist{head: &node{nil, &node{nil, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			nil,
+			0,
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			5,
+			1,
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			"five",
+			-1,
+		},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("Linked List Index test %d", i)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.ll.Find(tt.find)
+			if ans != tt.want {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+		})
+	}
+}
