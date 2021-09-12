@@ -220,6 +220,41 @@ func TestPopFront(t *testing.T) {
 	}
 }
 
+func TestAppend(t *testing.T) {
+	tests := []struct {
+		l    list
+		val  interface{}
+		want list
+	}{
+		{list{}, nil, list{nil}},
+		{list{nil}, nil, list{nil, nil}},
+		{list{nil}, 0, list{nil, 0}},
+		{list{nil}, "", list{nil, ""}},
+		{list{1, "two", 3}, "four", list{1, "two", 3, "four"}},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%v : %v", tt.l, tt.val)
+		t.Run(testname, func(t *testing.T) {
+			tt.l.Append(tt.val)
+			if len(tt.l) != len(tt.want) {
+				t.Errorf("got len %d, want len %d", len(tt.l), len(tt.want))
+			}
+			for i, v := range tt.want {
+				if i >= len(tt.l) {
+					break
+				}
+				if tt.l[i] != v {
+					t.Errorf("got %v at %d, want %v", tt.l[i], i, v)
+				}
+			}
+			if tt.l[len(tt.l)-1] != tt.val {
+				t.Errorf("got %v, want %v", tt.l[len(tt.l)-1], tt.val)
+			}
+		})
+	}
+}
+
 func sampleList(args ...interface{}) list {
 	l := NewList()
 	for _, v := range args {
