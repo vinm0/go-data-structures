@@ -158,6 +158,37 @@ func TestInsertAt(t *testing.T) {
 	}
 }
 
+func TestPushFront(t *testing.T) {
+	tests := []struct {
+		l        list
+		val      interface{}
+		wantList list
+		want     bool
+	}{
+		{list{}, nil, list{nil}, true},
+		{list{}, 0, list{0}, true},
+		{list{}, "", list{""}, true},
+		{list{nil}, nil, list{nil, nil}, true},
+		{list{nil}, 1, list{1, nil}, true},
+		{list{0, nil}, "zero", list{"zero", 0, nil}, true},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%v : %v", tt.l, tt.val)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.l.PushFront(tt.val)
+			if ans != tt.want {
+				t.Errorf("got %t, want %t", ans, tt.want)
+			}
+			for i, v := range tt.wantList {
+				if tt.l[i] != v {
+					t.Errorf("got %v at %d, want %v", tt.l[i], i, v)
+				}
+			}
+		})
+	}
+}
+
 func sampleList(args ...interface{}) list {
 	l := NewList()
 	for _, v := range args {
