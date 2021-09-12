@@ -390,3 +390,84 @@ func TestUpdateAtLL(t *testing.T) {
 		})
 	}
 }
+
+func TestRemoveAtLL(t *testing.T) {
+	tests := []struct {
+		ll       linkedlist
+		index    int
+		want     interface{}
+		wantList linkedlist
+	}{
+		{linkedlist{}, 0, nil, linkedlist{}},
+		{
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+			0,
+			nil,
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{0, nil}, tail: &node{0, nil}, size: 1},
+			0,
+			0,
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{"", nil}, tail: &node{"", nil}, size: 1},
+			0,
+			"",
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			-1,
+			nil,
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			1,
+			nil,
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			0,
+			"one",
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			1,
+			5,
+			linkedlist{head: &node{nil, &node{"three", nil}}, tail: &node{"three", nil}, size: 2},
+		},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("Linked List Index test %d", i)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.ll.RemoveAt(tt.index)
+			if ans != tt.want {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+			if tt.ll.size != tt.wantList.size {
+				t.Errorf("got %v size, want %v size", tt.ll.size, tt.wantList.size)
+			}
+			if tt.ll.head != nil && tt.wantList.head != nil &&
+				tt.ll.head.value != tt.wantList.head.value {
+				t.Errorf("got %v head, want %v head", *tt.ll.head, *tt.wantList.head)
+			}
+			if tt.ll.tail != nil && tt.wantList.tail != nil &&
+				tt.ll.tail.value != tt.wantList.tail.value {
+				t.Errorf("got %v tail, want %v tail", *tt.ll.tail, *tt.wantList.tail)
+			}
+			for i := 0; i < tt.ll.size; i++ {
+				v1 := tt.ll.Index(i)
+				v2 := tt.wantList.Index(i)
+				if v1 != v2 {
+					t.Errorf("got %v at %d, want %v", v1, i, v2)
+				}
+			}
+		})
+	}
+}
