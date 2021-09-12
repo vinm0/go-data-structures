@@ -195,3 +195,60 @@ func TestInsert(t *testing.T) {
 		})
 	}
 }
+
+func TestIndexLL(t *testing.T) {
+	tests := []struct {
+		ll    linkedlist
+		index int
+		want  interface{}
+	}{
+		{linkedlist{}, 0, nil},
+		{linkedlist{}, -1, nil},
+		{linkedlist{}, 1, nil},
+		{
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+			0,
+			nil,
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			0,
+			"one",
+		},
+		{
+			linkedlist{head: &node{nil, &node{nil, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			2,
+			"three",
+		},
+		{
+			linkedlist{head: &node{nil, &node{nil, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			1,
+			nil,
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			1,
+			5,
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			-1,
+			nil,
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			3,
+			nil,
+		},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("Linked List Index test %d", i)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.ll.Index(tt.index)
+			if ans != tt.want {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+		})
+	}
+}
