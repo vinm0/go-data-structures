@@ -82,6 +82,7 @@ func (ll *linkedlist) Insert(val interface{}, index int) (ok bool) {
 
 	n.next = curr.next
 	curr.next = n
+	ll.size++
 
 	return true
 }
