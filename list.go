@@ -91,10 +91,14 @@ func (l *list) InsertAt(index int, val interface{}) (ok bool) {
 		return false
 	}
 
-	beg := append((*l)[:index], val)
+	// Copy beginning of slice to prevent direct alteration
+	beg := make([]interface{}, index+1)
+	copy(beg, (*l)[:index])
+
 	end := (*l)[index:]
 
 	*l = append(beg, end...)
+	(*l)[index] = val
 
 	return true
 }
