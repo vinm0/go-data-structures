@@ -3,20 +3,17 @@ package main
 type Stack interface {
 	Push(interface{}) bool
 	Pop() interface{}
-	Peek() interface{}
 }
 
 type Queue interface {
 	Enqueue(interface{})
 	Dequeue() interface{}
-	Peek() interface{}
 }
 
 type Deque interface {
 	Queue
 	PushFront(interface{}) bool
 	Pop() interface{}
-	PeekFront() interface{}
 }
 
 type TreeNode interface {
