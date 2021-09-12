@@ -122,6 +122,42 @@ func TestUpdateAt(t *testing.T) {
 	}
 }
 
+func TestInsertAt(t *testing.T) {
+	tests := []struct {
+		l        list
+		index    int
+		val      interface{}
+		want     bool
+		wantList list
+	}{
+		{list{}, 0, nil, true, list{nil}},
+		{list{}, 1, nil, false, list{}},
+		{list{}, -1, nil, false, list{}},
+		{list{nil}, 0, nil, true, list{nil, nil}},
+		{list{nil}, 1, nil, true, list{nil, nil}},
+		{list{1, 2}, -1, "three", false, list{1, 2}},
+		{list{1, 2}, 3, "three", false, list{1, 2}},
+		{list{1, 2}, 2, "three", true, list{1, 2, "three"}},
+		{list{1, 2, "three"}, 2, "two", true, list{1, 2, "two", "three"}},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%v : %d,%v", tt.l, tt.index, tt.val)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.l.InsertAt(tt.index, tt.val)
+			fmt.Println(tt.l)
+			if ans != tt.want {
+				t.Errorf("got %t, want %t", ans, tt.want)
+			}
+			for i, v := range tt.wantList {
+				if tt.l[i] != v {
+					t.Errorf("got %v at %d, want %v", tt.l[i], i, v)
+				}
+			}
+		})
+	}
+}
+
 func sampleList(args ...interface{}) list {
 	l := NewList()
 	for _, v := range args {
