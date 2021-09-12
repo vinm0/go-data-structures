@@ -12,7 +12,7 @@ type node struct {
 }
 
 // Creates a base empty linked list.
-func NewLinkedlist() *linkedlist {
+func Linkedlist() *linkedlist {
 	return &linkedlist{}
 }
 
