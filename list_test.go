@@ -189,6 +189,7 @@ func TestPushFront(t *testing.T) {
 	}
 }
 
+// Also satisfies tests for Dequeue
 func TestPopFront(t *testing.T) {
 	tests := []struct {
 		l        list
@@ -220,6 +221,7 @@ func TestPopFront(t *testing.T) {
 	}
 }
 
+// Also satisfies tests for Push and Enqueue
 func TestAppend(t *testing.T) {
 	tests := []struct {
 		l    list
