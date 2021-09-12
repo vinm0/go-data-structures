@@ -149,19 +149,24 @@ func (ll *linkedlist) RemoveAt(index int) (val interface{}) {
 		return nil
 	}
 
-	if ll.size == 1 {
+	if index == 0 {
 		val = ll.head.value
-		ll.Clear()
+		ll.head = ll.head.next
+		ll.size--
+
 		return val
 	}
 
 	curr, prev := ll.traverseListTo(index)
 
-	prev.next = nil
-	ll.tail = prev
+	prev.next = curr.next
 
 	val = curr.value
 	curr = nil
+
+	if index == ll.size-1 {
+		ll.tail = prev
+	}
 
 	ll.size--
 
