@@ -7,7 +7,7 @@ package main
 type list []interface{}
 
 // Create a base empty list
-func NewList() list {
+func List() list {
 	l := make([]interface{}, 0)
 	return l
 }

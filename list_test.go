@@ -11,7 +11,7 @@ func TestPop(t *testing.T) {
 		wantPop interface{}
 		wantLen int
 	}{
-		{NewList(), nil, 0},
+		{List(), nil, 0},
 		{sampleList(nil), nil, 0},
 		{sampleList(""), "", 0},
 		{sampleList(0, "", nil), nil, 2},
@@ -258,7 +258,7 @@ func TestAppend(t *testing.T) {
 }
 
 func sampleList(args ...interface{}) list {
-	l := NewList()
+	l := List()
 	for _, v := range args {
 		l.Append(v)
 	}
