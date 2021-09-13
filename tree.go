@@ -13,7 +13,7 @@ type treeNode struct {
 	parent *treeNode
 }
 
-func NewTree() *tree {
+func Tree() *tree {
 	return &tree{}
 }
 
@@ -33,11 +33,11 @@ func (n *treeNode) Parent() *treeNode {
 	return n.parent
 }
 
-func (n *treeNode) LeftChild() *treeNode {
+func (n *treeNode) ChildL() *treeNode {
 	return n.left
 }
 
-func (n *treeNode) RightChild() *treeNode {
+func (n *treeNode) ChildR() *treeNode {
 	return n.right
 }
 
