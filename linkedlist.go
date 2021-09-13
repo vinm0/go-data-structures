@@ -245,7 +245,7 @@ func (ll *linkedlist) addToEmpty(n *node) (ok bool) {
 // Helper Function: Traverses the linked list up to the target index.
 // Returns curr as the node at the target index, and prev as the node prior.
 // This function does not validate the index argument. It assumes index has
-// already been validated
+// already been validated and the linked list is not empty.
 func (ll *linkedlist) traverseListTo(index int) (curr *node, prev *node) {
 
 	curr = ll.head
