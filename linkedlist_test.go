@@ -603,3 +603,44 @@ func TestClearLL(t *testing.T) {
 		})
 	}
 }
+
+func TestTraverseListTo(t *testing.T) {
+	tests := []struct {
+		ll       linkedlist
+		index    int
+		wantCurr *node
+		wantPrev *node
+	}{
+		{
+			linkedlist{head: &node{nil, &node{nil, nil}}, tail: &node{nil, nil}, size: 2},
+			1,
+			&node{nil, nil},
+			&node{nil, nil},
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			1,
+			&node{5, nil},
+			&node{nil, nil},
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			2,
+			&node{"three", nil},
+			&node{5, nil},
+		},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("Linked List RemoveVal test %d", i)
+		t.Run(testname, func(t *testing.T) {
+			ansCurr, ansPrev := tt.ll.traverseListTo(tt.index)
+			if ansCurr.value != tt.wantCurr.value {
+				t.Errorf("got curr %v, want %v", ansCurr.value, tt.wantCurr.value)
+			}
+			if ansPrev.value != tt.wantPrev.value {
+				t.Errorf("got prev %v, want %v", ansPrev.value, tt.wantPrev.value)
+			}
+		})
+	}
+}
