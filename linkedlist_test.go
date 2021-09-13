@@ -305,7 +305,7 @@ func TestFindLL(t *testing.T) {
 	}
 
 	for i, tt := range tests {
-		testname := fmt.Sprintf("Linked List Index test %d", i)
+		testname := fmt.Sprintf("Linked List Find test %d", i)
 		t.Run(testname, func(t *testing.T) {
 			ans := tt.ll.Find(tt.find)
 			if ans != tt.want {
@@ -371,7 +371,7 @@ func TestUpdateAtLL(t *testing.T) {
 	}
 
 	for i, tt := range tests {
-		testname := fmt.Sprintf("Linked List Index test %d", i)
+		testname := fmt.Sprintf("Linked List UpdateAt test %d", i)
 		t.Run(testname, func(t *testing.T) {
 			ans := tt.ll.UpdateAt(tt.index, tt.val)
 			if ans != tt.want {
@@ -444,9 +444,102 @@ func TestRemoveAtLL(t *testing.T) {
 	}
 
 	for i, tt := range tests {
-		testname := fmt.Sprintf("Linked List Index test %d", i)
+		testname := fmt.Sprintf("Linked List RemoveAt test %d", i)
 		t.Run(testname, func(t *testing.T) {
 			ans := tt.ll.RemoveAt(tt.index)
+			if ans != tt.want {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+			if tt.ll.size != tt.wantList.size {
+				t.Errorf("got %v size, want %v size", tt.ll.size, tt.wantList.size)
+			}
+			if tt.ll.head != nil && tt.wantList.head != nil &&
+				tt.ll.head.value != tt.wantList.head.value {
+				t.Errorf("got %v head, want %v head", *tt.ll.head, *tt.wantList.head)
+			}
+			if tt.ll.tail != nil && tt.wantList.tail != nil &&
+				tt.ll.tail.value != tt.wantList.tail.value {
+				t.Errorf("got %v tail, want %v tail", *tt.ll.tail, *tt.wantList.tail)
+			}
+			for i := 0; i < tt.ll.size; i++ {
+				v1 := tt.ll.Index(i)
+				v2 := tt.wantList.Index(i)
+				if v1 != v2 {
+					t.Errorf("got %v at %d, want %v", v1, i, v2)
+				}
+			}
+		})
+	}
+}
+
+func TestRemoveValLL(t *testing.T) {
+	tests := []struct {
+		ll       linkedlist
+		val      interface{}
+		want     int
+		wantList linkedlist
+	}{
+		{linkedlist{}, nil, -1, linkedlist{}},
+		{
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+			nil,
+			0,
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+			"",
+			-1,
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+		},
+		{
+			linkedlist{head: &node{"", nil}, tail: &node{"", nil}, size: 1},
+			nil,
+			-1,
+			linkedlist{head: &node{"", nil}, tail: &node{"", nil}, size: 1},
+		},
+		{
+			linkedlist{head: &node{0, nil}, tail: &node{0, nil}, size: 1},
+			0,
+			0,
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{"", nil}, tail: &node{"", nil}, size: 1},
+			"",
+			0,
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			nil,
+			-1,
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			1,
+			-1,
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+		},
+		{
+			linkedlist{head: &node{"one", nil}, tail: &node{"one", nil}, size: 1},
+			"one",
+			0,
+			linkedlist{},
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			5,
+			1,
+			linkedlist{head: &node{nil, &node{"three", nil}}, tail: &node{"three", nil}, size: 2},
+		},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("Linked List RemoveVal test %d", i)
+		t.Run(testname, func(t *testing.T) {
+			ans := tt.ll.RemoveVal(tt.val)
 			if ans != tt.want {
 				t.Errorf("got %v, want %v", ans, tt.want)
 			}
