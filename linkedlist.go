@@ -216,9 +216,8 @@ func (ll *linkedlist) RemoveVal(val interface{}) (index int) {
 }
 
 // Empties the linked list
-func (ll *linkedlist) Clear() *linkedlist {
-	ll = new(linkedlist)
-	return ll
+func (ll *linkedlist) Clear() {
+	*ll = linkedlist{}
 }
 
 // Returns true if the linked list contains no items.

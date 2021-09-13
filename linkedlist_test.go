@@ -564,3 +564,42 @@ func TestRemoveValLL(t *testing.T) {
 		})
 	}
 }
+
+func TestClearLL(t *testing.T) {
+	emptyList := linkedlist{}
+	tests := []struct {
+		ll   linkedlist
+		want *linkedlist
+	}{
+		{linkedlist{}, &emptyList},
+		{
+			linkedlist{head: &node{nil, nil}, tail: &node{nil, nil}, size: 1},
+			&emptyList,
+		},
+		{
+			linkedlist{head: &node{"", nil}, tail: &node{"", nil}, size: 1},
+			&emptyList,
+		},
+		{
+			linkedlist{head: &node{0, nil}, tail: &node{0, nil}, size: 1},
+			&emptyList,
+		},
+		{
+			linkedlist{head: &node{nil, &node{5, &node{"three", nil}}}, tail: &node{"three", nil}, size: 3},
+			&emptyList,
+		},
+	}
+
+	for i, tt := range tests {
+		testname := fmt.Sprintf("Linked List RemoveVal test %d", i)
+		t.Run(testname, func(t *testing.T) {
+			tt.ll.Clear()
+			if tt.ll.size != tt.want.size {
+				t.Errorf("got %v size, want %v size", tt.ll.size, tt.want.size)
+			}
+			if tt.ll.head != nil || tt.ll.tail != nil {
+				t.Errorf("Linked List contains non-nil node fields")
+			}
+		})
+	}
+}
